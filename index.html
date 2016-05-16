@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<title>html5刮刮乐</title>
+		<style>
+			.main{
+				margin:0 auto;
+				margin-top: 20px;
+				width:400px;
+				text-align:center;
+			}
+		</style>
+	</head>
+	<body>
+	<div class="main">
+		<p>刮开涂层看看</p>
+		<canvas>
+			你的浏览器不支持，请更换浏览器后重试！
+		</canvas>
+	</div>
+		<script>
+		var Scratch = function(){
+			this.canvas =  document.querySelector('canvas');
+			this.cxt = this.canvas.getContext('2d'); 
+			this.img = new Image();
+			this.img.src = 'p.jpg';
+			this.offsetX = this.canvas.offsetLeft;
+			this.offsetY = this.canvas.offsetTop;
+			this.mousedown = false;
+		};
+		Scratch.prototype = { 
+			initCanvas: function(){
+        		this.canvas.width = this.img.width;
+        		this.canvas.height = this.img.height;
+    		},
+			laryer:function(){
+				this.cxt.fillStyle = '#987E67';
+				this.cxt.fillRect(0,0, this.img.width, this.img.height);
+			},
+			draw:function(){
+				var that = this;
+				this.img.onload = function(){
+					that.initCanvas();
+					that.laryer();
+        			that.canvas.style.backgroundImage = 'url(' +  that.img.src + ')';
+        			that.cxt.globalCompositeOperation = 'destination-out';
+        			that.canvas.onmousedown = function(e){
+        				e.preventDefault();
+						that.mousedown = true;
+        			};
+        			that.canvas.onmouseup = function(e){
+        				e.preventDefault();
+						that.mousedown = false;
+        			};
+        			that.canvas.onmousemove = function(e){
+						e.preventDefault();
+						if(that.mousedown){
+							var x =  (e.clientX + document.documentElement.scrollLeft) - that.offsetX || 0;
+                    		var y = (e.clientY + document.documentElement.scrollTop) - that.offsetY || 0;
+                    		that.cxt.beginPath();
+                    		that.cxt.arc(x,y,8,0,Math.PI * 2,true);
+                    		that.cxt.closePath();
+                    		that.cxt.fill();
+						}
+        			}
+				}
+			},
+		};
+		var scratch = new Scratch();
+		scratch.draw();
+		</script>
+	</body>
+</html>
