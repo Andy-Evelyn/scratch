@@ -29,6 +29,7 @@
 			this.offsetX = this.canvas.offsetLeft;
 			this.offsetY = this.canvas.offsetTop;
 			this.mousedown = false;
+			this.init();
 		};
 		Scratch.prototype = { 
 			initCanvas: function(){
@@ -39,7 +40,7 @@
 				this.cxt.fillStyle = '#987E67';
 				this.cxt.fillRect(0,0, this.img.width, this.img.height);
 			},
-			draw:function(){
+			init:function(){
 				var that = this;
 				this.img.onload = function(){
 					that.initCanvas();
@@ -69,7 +70,6 @@
 			},
 		};
 		var scratch = new Scratch();
-		scratch.draw();
 		</script>
 	</body>
 </html>
